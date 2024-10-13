@@ -1,4 +1,0 @@
-Flask
-openai
-requests
-uuid
