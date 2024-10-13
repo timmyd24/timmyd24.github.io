@@ -65,7 +65,7 @@ async function sendMessage() {
   messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
   try {
-    const response = await fetch('https://your-backend-url.onrender.com/api/chat', {
+    const response = await fetch('https://openai-assistant-backend.onrender.com', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
