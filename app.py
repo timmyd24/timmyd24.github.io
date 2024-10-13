@@ -13,10 +13,12 @@ import streamlit_authenticator as stauth
 
 load_dotenv()
 
+
 def str_to_bool(str_input):
     if not isinstance(str_input, str):
         return False
     return str_input.lower() == "true"
+
 
 # Load environment variables
 openai_api_key = os.environ.get("OPENAI_API_KEY")
@@ -40,7 +42,7 @@ if authentication_required:
     else:
         authenticator = None  # No authentication should be performed
 
-# Initialize OpenAI client
+client = None
 if azure_openai_endpoint and azure_openai_key:
     client = openai.AzureOpenAI(
         api_key=azure_openai_key,
@@ -49,6 +51,7 @@ if azure_openai_endpoint and azure_openai_key:
     )
 else:
     client = openai.OpenAI(api_key=openai_api_key)
+
 
 class EventHandler(AssistantEventHandler):
     @override
@@ -153,41 +156,21 @@ class EventHandler(AssistantEventHandler):
             ) as stream:
                 stream.until_done()
 
-def create_assistant():
-    # Create an assistant
-    assistant = client.beta.assistants.create()
-    st.session_state.assistant_id = assistant.id
-    return assistant
 
-def create_thread():
-    # Create a thread
-    thread = client.beta.threads.create()
-    st.session_state.thread_id = thread.id
-    return thread
+def create_thread(content, file):
+    return client.beta.threads.create()
 
-def create_message(thread_id, assistant_id, content, file):
-    # Add a message to the thread
+
+def create_message(thread, content, file):
     attachments = []
     if file is not None:
         attachments.append(
-            {
-                "file_id": file.id,
-                "tools": [{"type": "code_interpreter"}, {"type": "file_search"}],
-            }
+            {"file_id": file.id, "tools": [{"type": "code_interpreter"}, {"type": "file_search"}]}
         )
-    message = client.beta.threads.messages.create(
-        thread_id=thread_id,
-        role="user",
-        content=content,
-        attachments=attachments,
-        assistant_id=assistant_id,
+    client.beta.threads.messages.create(
+        thread_id=thread.id, role="user", content=content, attachments=attachments
     )
-    return message
 
-def create_run(thread_id):
-    # Create a run
-    run = client.beta.threads.runs.create(thread_id=thread_id)
-    return run
 
 def create_file_link(file_name, file_id):
     content = client.files.content(file_id)
@@ -195,6 +178,7 @@ def create_file_link(file_name, file_id):
     b64 = base64.b64encode(content.text.encode(content.encoding)).decode()
     link_tag = f'<a href="data:{content_type};base64,{b64}" download="{file_name}">Download Link</a>'
     return link_tag
+
 
 def format_annotation(text):
     citations = []
@@ -216,42 +200,31 @@ def format_annotation(text):
     text_value += "\n\n" + "\n".join(citations)
     return text_value
 
-def run_stream(user_input, file):
-    # Ensure assistant and thread are created
-    if "assistant_id" not in st.session_state:
-        assistant = create_assistant()
-    else:
-        assistant = client.beta.assistants.retrieve(st.session_state.assistant_id)
 
-    if "thread_id" not in st.session_state:
-        thread = create_thread()
-    else:
-        thread = client.beta.threads.retrieve(st.session_state.thread_id)
-
-    # Create message
-    message = create_message(thread.id, assistant.id, user_input, file)
-
-    # Create a run
-    run = create_run(thread.id)
-
-    # Stream the assistant's response
-    with client.beta.threads.runs.create_stream(
-        thread_id=thread.id,
-        run_id=run.id,
+def run_stream(user_input, file, selected_assistant_id):
+    if "thread" not in st.session_state:
+        st.session_state.thread = create_thread(user_input, file)
+    create_message(st.session_state.thread, user_input, file)
+    with client.beta.threads.runs.stream(
+        thread_id=st.session_state.thread.id,
+        assistant_id=selected_assistant_id,
         event_handler=EventHandler(),
     ) as stream:
         stream.until_done()
 
+
 def handle_uploaded_file(uploaded_file):
     file = client.files.create(file=uploaded_file, purpose="assistants")
     return file
+
 
 def render_chat():
     for chat in st.session_state.chat_log:
         with st.chat_message(chat["name"]):
             st.markdown(chat["msg"], True)
 
-if "tool_calls" not in st.session_state:
+
+if "tool_call" not in st.session_state:
     st.session_state.tool_calls = []
 
 if "chat_log" not in st.session_state:
@@ -260,8 +233,10 @@ if "chat_log" not in st.session_state:
 if "in_progress" not in st.session_state:
     st.session_state.in_progress = False
 
+
 def disable_form():
     st.session_state.in_progress = True
+
 
 def login():
     if st.session_state["authentication_status"] is False:
@@ -269,13 +244,13 @@ def login():
     elif st.session_state["authentication_status"] is None:
         st.warning("Please enter your username and password")
 
+
 def reset_chat():
     st.session_state.chat_log = []
     st.session_state.in_progress = False
-    st.session_state.thread_id = None
-    st.session_state.assistant_id = None
 
-def load_chat_screen():
+
+def load_chat_screen(assistant_id, assistant_title):
     if enabled_file_upload_message:
         uploaded_file = st.sidebar.file_uploader(
             enabled_file_upload_message,
@@ -293,7 +268,7 @@ def load_chat_screen():
     else:
         uploaded_file = None
 
-    st.title("Assistants API UI")
+    st.title(assistant_title if assistant_title else "")
     user_msg = st.chat_input(
         "Message", on_submit=disable_form, disabled=st.session_state.in_progress
     )
@@ -306,15 +281,20 @@ def load_chat_screen():
         file = None
         if uploaded_file is not None:
             file = handle_uploaded_file(uploaded_file)
-        run_stream(user_msg, file)
+        run_stream(user_msg, file, assistant_id)
         st.session_state.in_progress = False
         st.session_state.tool_call = None
         st.rerun()
 
     render_chat()
 
+
 def main():
-    # Authentication (if required)
+    # Check if multi-agent settings are defined
+    multi_agents = os.environ.get("OPENAI_ASSISTANTS", None)
+    single_agent_id = os.environ.get("ASSISTANT_ID", None)
+    single_agent_title = os.environ.get("ASSISTANT_TITLE", "Assistants API UI")
+
     if (
         authentication_required
         and "credentials" in st.secrets
@@ -327,8 +307,26 @@ def main():
         else:
             authenticator.logout(location="sidebar")
 
-    # Load chat screen
-    load_chat_screen()
+    if multi_agents:
+        assistants_json = json.loads(multi_agents)
+        assistants_object = {f'{obj["title"]}': obj for obj in assistants_json}
+        selected_assistant = st.sidebar.selectbox(
+            "Select an assistant profile?",
+            list(assistants_object.keys()),
+            index=None,
+            placeholder="Select an assistant profile...",
+            on_change=reset_chat,  # Call the reset function on change
+        )
+        if selected_assistant:
+            load_chat_screen(
+                assistants_object[selected_assistant]["id"],
+                assistants_object[selected_assistant]["title"],
+            )
+    elif single_agent_id:
+        load_chat_screen(single_agent_id, single_agent_title)
+    else:
+        st.error("No assistant configurations defined in environment variables.")
+
 
 if __name__ == "__main__":
     main()
