@@ -2,58 +2,23 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>OpenAI Assistant</title>
-  <!-- Linking Google Fonts For Icons -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" />
+  <title>ChatGPT-like Assistant</title>
+  <!-- Include Google Fonts for Icons -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Icons" />
+  <!-- Include your CSS file -->
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header class="header">
-  <!-- Header Greetings -->
-  <h1 class="title">Hello, there</h1>
-  <p class="subtitle">How can I help you today?</p>
-
-  <!-- Suggestion list -->
-  <ul class="suggestion-list">
-    <li class="suggestion">
-      <h4 class="text">Help me plan a game night with my 5 best friends for under $100.</h4>
-      <span class="icon material-symbols-rounded">draw</span>
-    </li>
-    <li class="suggestion">
-      <h4 class="text">What are the best tips to improve my public speaking skills?</h4>
-      <span class="icon material-symbols-rounded">lightbulb</span>
-    </li>
-    <li class="suggestion">
-      <h4 class="text">Can you help me find the latest news on web development?</h4>
-      <span class="icon material-symbols-rounded">explore</span>
-    </li>
-    <li class="suggestion">
-      <h4 class="text">Write JavaScript code to sum all elements in an array.</h4>
-      <span class="icon material-symbols-rounded">code</span>
-    </li>
-  </ul>
-</header>
-
-<!-- Chat List / Container -->
-<div class="chat-list" id="chat-list"></div>
-
-<!-- Typing Area -->
-<div class="typing-area">
-  <form action="#" class="typing-form">
-    <div class="input-wrapper">
-      <input type="text" placeholder="Enter a prompt here" class="typing-input" id="user-input" required />
-      <button type="submit" class="icon material-symbols-rounded" id="send-button">send</button>
-    </div>
-    <div class="action-buttons">
-      <span id="theme-toggle-button" class="icon material-symbols-rounded">light_mode</span>
-      <span id="delete-chat-button" class="icon material-symbols-rounded">delete</span>
-    </div>
-  </form>
-  <p class="disclaimer-text">
-    The assistant may display inaccurate information, so double-check its responses.
-  </p>
+<div id="chat-container">
+  <div id="chat-history"></div>
+  <div id="chat-input-area">
+    <textarea id="user-input" rows="1" placeholder="Type your message..."></textarea>
+    <button id="send-button">
+      <span class="material-icons">send</span>
+    </button>
+  </div>
 </div>
-
+<!-- Include your JavaScript file -->
 <script src="script.js"></script>
 </body>
 </html>
