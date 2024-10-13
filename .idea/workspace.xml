@@ -4,8 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8157767b-91fc-4c01-84fe-b7a912fce34b" name="Changes" comment="updated render url">
-      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+    <list default="true" id="8157767b-91fc-4c01-84fe-b7a912fce34b" name="Changes" comment="updated render url new">
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/script.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/style.css" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -136,7 +139,15 @@
       <option name="project" value="LOCAL" />
       <updated>1728820450007</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="updated render url new">
+      <option name="closed" value="true" />
+      <created>1728820752640</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1728820752640</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -147,6 +158,7 @@
     <MESSAGE value="test" />
     <MESSAGE value="test 2" />
     <MESSAGE value="updated render url" />
-    <option name="LAST_COMMIT_MESSAGE" value="updated render url" />
+    <MESSAGE value="updated render url new" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated render url new" />
   </component>
 </project>
