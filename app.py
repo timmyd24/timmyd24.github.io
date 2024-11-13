@@ -220,8 +220,8 @@ def handle_uploaded_file(uploaded_file):
 
 # Define the welcome message
 WELCOME_MESSAGE = (
-    "TRITON is an AI-based secure MTP interpreter project done by ME4 Tan Chee Wei, "
-    "ME2 Dean Lee & ME1 Timothy David. TRITON is a tool meant to decode / encode signals "
+    "TRITON is an AI-based secure MTP interpreter project done by Tan Chee Wei, "
+    "Dean Lee & Timothy David. TRITON is a tool meant to decode / encode signals "
     "in the MTP using AI and LLM Technology."
 )
 

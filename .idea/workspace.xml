@@ -4,8 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8157767b-91fc-4c01-84fe-b7a912fce34b" name="Changes" comment="rollback framework">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="8157767b-91fc-4c01-84fe-b7a912fce34b" name="Changes" comment="fixing welcome message">
+      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -211,7 +211,23 @@
       <option name="project" value="LOCAL" />
       <updated>1728826298441</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="added welcome mesasage framework">
+      <option name="closed" value="true" />
+      <created>1731481960926</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1731481960926</updated>
+    </task>
+    <task id="LOCAL-00019" summary="fixing welcome message">
+      <option name="closed" value="true" />
+      <created>1731482179959</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1731482179959</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -228,6 +244,8 @@
     <MESSAGE value="new" />
     <MESSAGE value="update framework" />
     <MESSAGE value="rollback framework" />
-    <option name="LAST_COMMIT_MESSAGE" value="rollback framework" />
+    <MESSAGE value="added welcome mesasage framework" />
+    <MESSAGE value="fixing welcome message" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixing welcome message" />
   </component>
 </project>
