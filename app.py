@@ -220,9 +220,10 @@ def handle_uploaded_file(uploaded_file):
 
 # Define the welcome message
 WELCOME_MESSAGE = (
-    "TRITON is an AI-based secure MTP interpreter project done by Tan Chee Wei, "
-    "Dean Lee & Timothy David. TRITON is a tool meant to decode / encode signals "
-    "in the MTP using AI and LLM Technology."
+    "TRITON is a trial prototype designed to translate plain intentions into coded tactical signals using MTP. "
+    "It is also envisioned as a learning tool to aid personnel in learning how to use MTP for tactical signals. "
+    "Additionally, TRITON is capable of encoding and decoding MTP signals, making it an invaluable tool for tactical communication."
+    "Joint project by Tan Chee Wei, Dean Lee & Timothy David"
 )
 
 # Update render_chat to ensure welcome message is displayed at start

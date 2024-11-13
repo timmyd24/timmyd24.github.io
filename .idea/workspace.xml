@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8157767b-91fc-4c01-84fe-b7a912fce34b" name="Changes" comment="fixing welcome message">
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-    </list>
+    <list default="true" id="8157767b-91fc-4c01-84fe-b7a912fce34b" name="Changes" comment="Remove ranks" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -227,7 +225,15 @@
       <option name="project" value="LOCAL" />
       <updated>1731482179959</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="Remove ranks">
+      <option name="closed" value="true" />
+      <created>1731482330088</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1731482330088</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -246,6 +252,7 @@
     <MESSAGE value="rollback framework" />
     <MESSAGE value="added welcome mesasage framework" />
     <MESSAGE value="fixing welcome message" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixing welcome message" />
+    <MESSAGE value="Remove ranks" />
+    <option name="LAST_COMMIT_MESSAGE" value="Remove ranks" />
   </component>
 </project>
