@@ -222,7 +222,7 @@ def handle_uploaded_file(uploaded_file):
 WELCOME_MESSAGE = (
     "TRITON is a trial prototype designed to translate plain intentions into coded tactical signals using MTP. "
     "It is also envisioned as a learning tool to aid personnel in learning how to use MTP for tactical signals. "
-    "Additionally, TRITON is capable of encoding and decoding MTP signals, making it an invaluable tool for tactical communication."
+    "Additionally, TRITON is capable of encoding and decoding MTP signals, making it an invaluable tool for tactical communication. "
     "Joint project by Timothy David, Dean Lee & Tan Chee Wei"
 )
 
