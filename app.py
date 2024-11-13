@@ -223,7 +223,7 @@ WELCOME_MESSAGE = (
     "TRITON is a trial prototype designed to translate plain intentions into coded tactical signals using MTP. "
     "It is also envisioned as a learning tool to aid personnel in learning how to use MTP for tactical signals. "
     "Additionally, TRITON is capable of encoding and decoding MTP signals, making it an invaluable tool for tactical communication."
-    "Joint project by Tan Chee Wei, Dean Lee & Timothy David"
+    "Joint project by Timothy David, Dean Lee & Tan Chee Wei"
 )
 
 # Update render_chat to ensure welcome message is displayed at start
