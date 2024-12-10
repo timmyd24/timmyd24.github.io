@@ -178,8 +178,8 @@ def load_chat_screen(assistant_id, assistant_title):
     )
     st.title(assistant_title if assistant_title else "")
     user_msg = st.chat_input("Message", on_submit=disable_form, disabled=st.session_state.in_progress)
+
     if user_msg:
-        render_chat()
         with st.chat_message("user"):
             st.markdown(user_msg, True)
         st.session_state.chat_log.append({"name": "user", "msg": user_msg})
@@ -187,10 +187,12 @@ def load_chat_screen(assistant_id, assistant_title):
         file = None
         if uploaded_file is not None:
             file = handle_uploaded_file(uploaded_file)
+
+        # Stream response without rerunning the app
         run_stream(user_msg, file, assistant_id)
         st.session_state.in_progress = False
-        st.rerun()
 
+    # Render chat log
     render_chat()
 
 
