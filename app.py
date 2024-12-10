@@ -163,6 +163,54 @@ def render_chat():
             st.markdown(chat["msg"], True)
 
 
+if "tool_call" not in st.session_state:
+    st.session_state.tool_calls = []
+
+if "chat_log" not in st.session_state:
+    st.session_state.chat_log = []
+
+if "in_progress" not in st.session_state:
+    st.session_state.in_progress = False
+
+
+def disable_form():
+    st.session_state.in_progress = True
+
+
+def reset_chat():
+    st.session_state.chat_log = []
+    st.session_state.in_progress = False
+
+
+def load_chat_screen(assistant_id, assistant_title):
+    WELCOME_MESSAGES = {
+        "TRITON": (
+            "TRITON is a trial prototype designed to translate plain intentions into coded tactical signals using MTP. "
+            "It is also envisioned as a learning tool to aid personnel in learning how to use MTP for tactical signals. "
+            "Additionally, TRITON is capable of encoding and decoding MTP signals, making it an invaluable tool for tactical communication. "
+            "Joint project by Timothy David, Dean Lee & Tan Chee Wei."
+        ),
+        "GENERAL ASSISTANT (UNCLASSIFIED)": (
+            "Welcome to the General Assistant! This assistant is designed to handle your queries across various topics, "
+            "helping with tasks like research, learning, and document analysis. Let me know how I can assist you today!"
+        ),
+    }
+
+    WELCOME_MESSAGE = WELCOME_MESSAGES.get(assistant_title, "Welcome!")
+
+    if not st.session_state.chat_log:
+        st.session_state.chat_log.append({"name": assistant_title, "msg": WELCOME_MESSAGE})
+
+    uploaded_file = st.sidebar.file_uploader("Upload a file", type=["txt", "pdf", "csv", "json"])
+    user_msg = st.chat_input("Message")
+    if user_msg:
+        render_chat()
+        st.session_state.chat_log.append({"name": "user", "msg": user_msg})
+        st.rerun()
+
+    render_chat()
+
+
 def main():
     multi_agents = os.environ.get("OPENAI_ASSISTANTS", None)
 
@@ -174,21 +222,14 @@ def main():
             list(assistants_object.keys()),
             index=None,
             placeholder="Select an assistant profile...",
-            on_change=lambda: st.session_state.chat_log.clear(),  # Reset chat log on change
+            on_change=reset_chat
         )
         if selected_assistant:
-            # Set dynamic welcome message based on selected assistant
-            WELCOME_MESSAGE = (
-                "TRITON is a trial prototype designed to translate plain intentions into coded tactical signals using MTP. "
-                if assistants_object[selected_assistant]["title"] == "TRITON"
-                else "Welcome to the General Assistant! I am here to assist you with general tasks."
-            )
-            st.session_state.chat_log = [{"name": assistants_object[selected_assistant]["title"], "msg": WELCOME_MESSAGE}]
-
             load_chat_screen(
                 assistants_object[selected_assistant]["id"],
                 assistants_object[selected_assistant]["title"],
             )
+
 
 if __name__ == "__main__":
     main()
