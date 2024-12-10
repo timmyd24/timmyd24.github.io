@@ -40,7 +40,7 @@ if authentication_required:
             st.secrets["cookie"]["expiry_days"],
         )
     else:
-        authenticator = None  # No authentication should be performed
+        authenticator = None
 
 client = None
 if azure_openai_endpoint and azure_openai_key:
@@ -128,7 +128,14 @@ def format_annotation(text):
     return text_value
 
 
-# Dynamic welcome messages
+def create_file_link(file_name, file_id):
+    content = client.files.content(file_id)
+    content_type = content.response.headers["content-type"]
+    b64 = base64.b64encode(content.text.encode(content.encoding)).decode()
+    return f'<a href="data:{content_type};base64,{b64}" download="{file_name}">Download Link</a>'
+
+
+# Define welcome messages
 WELCOME_MESSAGES = {
     "TRITON": (
         "TRITON is a trial prototype designed to translate plain intentions into coded tactical signals using MTP. "
@@ -145,12 +152,9 @@ WELCOME_MESSAGES = {
 
 
 def render_chat(selected_assistant):
-    # Determine the welcome message based on the selected assistant
     welcome_message = WELCOME_MESSAGES.get(selected_assistant, "Welcome! How can I assist you today?")
-
     if not st.session_state.chat_log:
         st.session_state.chat_log.append({"name": selected_assistant, "msg": welcome_message})
-
     for chat in st.session_state.chat_log:
         with st.chat_message(chat["name"]):
             st.markdown(chat["msg"], True)
