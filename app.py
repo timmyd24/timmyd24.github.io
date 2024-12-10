@@ -220,12 +220,12 @@ def handle_uploaded_file(uploaded_file):
 
 # Define the welcome message
 WELCOME_MESSAGE = (
-    "TRITON is a trial prototype designed to translate plain intentions into coded tactical signals using MTP. \n"
-    "It is also envisioned as a learning tool to aid personnel in learning how to use MTP for tactical signals. \n"
-    "Additionally, TRITON is capable of encoding and decoding MTP signals, making it an invaluable tool for tactical communication. \n"
-    "Use the General Assistant for general matters (UNCLASSIFIED ONLY). \n\n"
-    "Joint project by Timothy David, Dean Lee & Tan Chee Wei. \n"
-    "Special thanks to Hai Ji for MTP Data Sheet. \n"
+    "TRITON is a trial prototype designed to translate plain intentions into coded tactical signals using MTP. \n\n"
+    "It is also envisioned as a learning tool to aid personnel in learning how to use MTP for tactical signals. \n\n"
+    "Additionally, TRITON is capable of encoding and decoding MTP signals, making it an invaluable tool for tactical communication. \n\n"
+    "Use the General Assistant for general matters (UNCLASSIFIED ONLY). \n\n\n"
+    "Joint project by Timothy David, Dean Lee & Tan Chee Wei. \n\n"
+    "Special thanks to Hai Ji for MTP Data Sheet. \n\n"
 )
 
 # Update render_chat to ensure welcome message is displayed at start
