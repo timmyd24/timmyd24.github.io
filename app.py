@@ -97,9 +97,7 @@ class EventHandler(AssistantEventHandler):
         if delta.type == "code_interpreter":
             if delta.code_interpreter.input:
                 st.session_state.current_tool_input += delta.code_interpreter.input
-                input_code = f"### code interpreter\ninput:\n
-python\n{st.session_state.current_tool_input}\n
-"
+                input_code = f"### code interpreter\ninput:\n```python\n{st.session_state.current_tool_input}\n```"
                 st.session_state.current_tool_input_markdown.markdown(input_code, True)
 
             if delta.code_interpreter.outputs:
@@ -113,17 +111,13 @@ python\n{st.session_state.current_tool_input}\n
         if tool_call.type == "code_interpreter":
             if tool_call.id in [x.id for x in st.session_state.tool_calls]:
                 return
-            input_code = f"### code interpreter\ninput:\n
-python\n{tool_call.code_interpreter.input}\n
-"
+            input_code = f"### code interpreter\ninput:\n```python\n{tool_call.code_interpreter.input}\n```"
             st.session_state.current_tool_input_markdown.markdown(input_code, True)
             st.session_state.chat_log.append({"name": "assistant", "msg": input_code})
             st.session_state.current_tool_input_markdown = None
             for output in tool_call.code_interpreter.outputs:
                 if output.type == "logs":
-                    output = f"### code interpreter\noutput:\n
-\n{output.logs}\n
-"
+                    output = f"### code interpreter\noutput:\n```\n{output.logs}\n```"
                     with st.chat_message("Assistant"):
                         st.markdown(output, True)
                         st.session_state.chat_log.append(
@@ -229,9 +223,9 @@ WELCOME_MESSAGE = (
     "TRITON is a trial prototype designed to translate plain intentions into coded tactical signals using MTP. "
     "It is also envisioned as a learning tool to aid personnel in learning how to use MTP for tactical signals. "
     "Additionally, TRITON is capable of encoding and decoding MTP signals, making it an invaluable tool for tactical communication. "
-    "Please select the General Purpose Assistant for other uses. (UNCLASSIFIED ONLY). "
+    "Use the General Purpose Assistant for general matter (UNCLASSIFIED ONLY). "
     "Joint project by Timothy David, Dean Lee & Tan Chee Wei. "
-    "Special Thanks to Hai Ji for MTP Datasheet. "
+    "Special thanks to Hai Ji for MTP Data Sheet. "
 )
 
 # Update render_chat to ensure welcome message is displayed at start
