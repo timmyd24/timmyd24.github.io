@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8157767b-91fc-4c01-84fe-b7a912fce34b" name="Changes" comment="Edit welcome Message">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="8157767b-91fc-4c01-84fe-b7a912fce34b" name="Changes" comment="updated scripts" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -259,7 +257,15 @@
       <option name="project" value="LOCAL" />
       <updated>1731498646791</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="updated scripts">
+      <option name="closed" value="true" />
+      <created>1733844646327</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1733844646327</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -280,6 +286,7 @@
     <MESSAGE value="fixing welcome message" />
     <MESSAGE value="Remove ranks" />
     <MESSAGE value="Edit welcome Message" />
-    <option name="LAST_COMMIT_MESSAGE" value="Edit welcome Message" />
+    <MESSAGE value="updated scripts" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated scripts" />
   </component>
 </project>

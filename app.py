@@ -81,6 +81,17 @@ class EventHandler(AssistantEventHandler):
         st.session_state.current_markdown.markdown(format_text, True)
         st.session_state.chat_log.append({"name": "assistant", "msg": format_text})
 
+    @override
+    def on_tool_call_created(self, tool_call):
+        if tool_call.type == "code_interpreter":
+            st.session_state.current_tool_input = ""
+            with st.chat_message("Assistant"):
+                st.session_state.current_tool_input_markdown = st.empty()
+
+    @override
+    def on_tool_call_done(self, tool_call):
+        st.session_state.tool_calls.append(tool_call)
+
 
 def create_thread(content, file):
     return client.beta.threads.create()
@@ -102,7 +113,22 @@ def handle_uploaded_file(uploaded_file):
     return file
 
 
-# Define welcome messages for each assistant
+def format_annotation(text):
+    citations = []
+    text_value = text.value
+    for index, annotation in enumerate(text.annotations):
+        text_value = text_value.replace(annotation.text, f" [{index}]")
+
+        if file_citation := getattr(annotation, "file_citation", None):
+            cited_file = client.files.retrieve(file_citation.file_id)
+            citations.append(
+                f"[{index}] {file_citation.quote} from {cited_file.filename}"
+            )
+    text_value += "\n\n" + "\n".join(citations)
+    return text_value
+
+
+# Dynamic welcome messages
 WELCOME_MESSAGES = {
     "TRITON": (
         "TRITON is a trial prototype designed to translate plain intentions into coded tactical signals using MTP. "
@@ -122,11 +148,9 @@ def render_chat(selected_assistant):
     # Determine the welcome message based on the selected assistant
     welcome_message = WELCOME_MESSAGES.get(selected_assistant, "Welcome! How can I assist you today?")
 
-    # Check if the welcome message is missing from the chat log and add it
     if not st.session_state.chat_log:
         st.session_state.chat_log.append({"name": selected_assistant, "msg": welcome_message})
 
-    # Render each message in the chat log
     for chat in st.session_state.chat_log:
         with st.chat_message(chat["name"]):
             st.markdown(chat["msg"], True)
@@ -144,31 +168,20 @@ def run_stream(user_input, file, selected_assistant_id):
         stream.until_done()
 
 
-def disable_form():
-    st.session_state.in_progress = True
-
-
 def reset_chat():
     st.session_state.chat_log = []
     st.session_state.in_progress = False
 
 
 def load_chat_screen(assistant_id, assistant_title):
-    if enabled_file_upload_message:
-        uploaded_file = st.sidebar.file_uploader(
-            enabled_file_upload_message,
-            type=["txt", "pdf", "csv", "json", "geojson", "xlsx", "xls"],
-            disabled=st.session_state.in_progress,
-        )
-    else:
-        uploaded_file = None
-
-    st.title(assistant_title if assistant_title else "")
-    user_msg = st.chat_input(
-        "Message", on_submit=disable_form, disabled=st.session_state.in_progress
+    uploaded_file = st.sidebar.file_uploader(
+        enabled_file_upload_message,
+        type=["txt", "pdf", "csv", "json", "geojson", "xlsx", "xls"],
     )
 
-    # Render chat with dynamic welcome message
+    st.title(assistant_title if assistant_title else "")
+    user_msg = st.chat_input("Message", on_submit=reset_chat)
+
     render_chat(assistant_title)
 
     if user_msg:
@@ -180,35 +193,28 @@ def load_chat_screen(assistant_id, assistant_title):
         if uploaded_file is not None:
             file = handle_uploaded_file(uploaded_file)
         run_stream(user_msg, file, assistant_id)
-        st.session_state.in_progress = False
         st.rerun()
 
 
 def main():
-    # Check if multi-agent settings are defined
     multi_agents = os.environ.get("OPENAI_ASSISTANTS", None)
-    single_agent_id = os.environ.get("ASSISTANT_ID", None)
-    single_agent_title = os.environ.get("ASSISTANT_TITLE", "Assistants API UI")
 
     if multi_agents:
         assistants_json = json.loads(multi_agents)
-        assistants_object = {f'{obj["title"]}': obj for obj in assistants_json}
+        assistants_object = {obj["title"]: obj for obj in assistants_json}
+
         selected_assistant = st.sidebar.selectbox(
-            "Select an assistant profile?",
+            "Select an assistant profile",
             list(assistants_object.keys()),
             index=None,
-            placeholder="Select an assistant profile...",
             on_change=reset_chat,
         )
+
         if selected_assistant:
             load_chat_screen(
                 assistants_object[selected_assistant]["id"],
                 assistants_object[selected_assistant]["title"],
             )
-    elif single_agent_id:
-        load_chat_screen(single_agent_id, single_agent_title)
-    else:
-        st.error("No assistant configurations defined in environment variables.")
 
 
 if __name__ == "__main__":
